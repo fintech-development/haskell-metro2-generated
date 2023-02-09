@@ -1,16 +1,21 @@
 #!/usr/bin/env nix-shell
-with import <nixpkgs> {};
+with import <nixos-22.11> {};
 
 let
-  ghc = haskell.compiler.ghc8107;
-  #hls = haskell-language-server; # .override { supportedGhcVersions = [ "8107" ]; };
-  ormolu = haskell.packages.ghc8107.ormolu;
-  apply-refact = haskell.packages.ghc8107.apply-refact;
+  ghc = haskell.compiler.ghc925;
+
+  hls = haskell-language-server.override {
+    supportedGhcVersions = [ "92" ];
+    };
+  haskell-packages = haskell.packages.ghc925;
+  ormolu = haskell-packages.ormolu;
+  hpack = haskell-packages.hpack;
+  apply-refact = haskell-packages.apply-refact;
 in
 haskell.lib.buildStackProject {
     name = "hls";
     buildInputs = [
-      #hls
+      hls
       ghc
       stack
       hlint
