@@ -28,8 +28,8 @@ Module : METRO2.Model
 
 module METRO2.Model where
 
-import METRO2.Core
-import METRO2.MimeTypes
+import Network.Integrated.HTTP.Core
+import Network.Integrated.HTTP.MimeTypes
 
 import Data.Aeson ((.:),(.:!),(.:?),(.=))
 

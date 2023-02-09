@@ -15,7 +15,7 @@ import Test.QuickCheck
 import Test.QuickCheck.Property
 import Test.Hspec.QuickCheck (prop)
 
-import METRO2.MimeTypes
+import Network.Integrated.HTTP.MimeTypes
 
 import ApproxEq
 

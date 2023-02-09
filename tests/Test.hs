@@ -13,7 +13,7 @@ import PropMime
 import Instances ()
 
 import METRO2.Model
-import METRO2.MimeTypes
+import Network.Integrated.HTTP.MimeTypes
 
 main :: IO ()
 main =

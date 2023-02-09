@@ -21,8 +21,8 @@ Module : METRO2.API.Metro2Files
 
 module METRO2.API.Metro2Files where
 
-import METRO2.Core
-import METRO2.MimeTypes
+import Network.Integrated.HTTP.Core
+import Network.Integrated.HTTP.MimeTypes
 import METRO2.Model as M
 
 import qualified Data.Aeson as A
@@ -69,7 +69,7 @@ convert
   :: (Consumes Convert contentType)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
-  -> TheMetro2Request Convert contentType FilePath accept
+  -> Request Convert contentType FilePath accept
 convert _  _ =
   _mkRequest "POST" ["/convert"]
 
@@ -125,7 +125,7 @@ instance Produces Convert MimePlainText
 -- Check the metro2 service to check if running
 -- 
 health
-  :: TheMetro2Request Health MimeNoContent Text MimePlainText
+  :: Request Health MimeNoContent Text MimePlainText
 health =
   _mkRequest "GET" ["/health"]
 
@@ -146,7 +146,7 @@ print
   :: (Consumes Print contentType)
   => ContentType contentType -- ^ request content-type ('MimeType')
   -> Accept accept -- ^ request accept ('MimeType')
-  -> TheMetro2Request Print contentType Text accept
+  -> Request Print contentType Text accept
 print _  _ =
   _mkRequest "POST" ["/print"]
 
@@ -188,7 +188,7 @@ instance Produces Print MimePlainText
 -- 
 validator
   :: (Consumes Validator MimeMultipartFormData)
-  => TheMetro2Request Validator MimeMultipartFormData Text MimePlainText
+  => Request Validator MimeMultipartFormData Text MimePlainText
 validator =
   _mkRequest "POST" ["/validator"]
 

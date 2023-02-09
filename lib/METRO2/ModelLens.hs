@@ -33,7 +33,7 @@ import Prelude (($), (.),(<$>),(<*>),(=<<),Maybe(..),Bool(..),Char,Double,FilePa
 import qualified Prelude as P
 
 import METRO2.Model
-import METRO2.Core
+import Network.Integrated.HTTP.Core
 
 
 -- * BaseSegment

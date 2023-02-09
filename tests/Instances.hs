@@ -3,7 +3,7 @@
 module Instances where
 
 import METRO2.Model
-import METRO2.Core
+import Network.Integrated.HTTP.Core
 
 import qualified Data.Aeson as A
 import qualified Data.ByteString.Lazy as BL
