@@ -1,4 +1,4 @@
-name:           metro2
+name:           haskell-metro2-generated
 version:        0.1.0.0
 synopsis:       Auto-generated metro2 API Client
 description:    .
@@ -56,7 +56,7 @@ library
     , vector >=0.10.9 && <0.13
     , haskell-client-generated
   other-modules:
-      Paths_metro2
+      Paths_haskell_metro2_generated
   exposed-modules:
       METRO2
       METRO2.API.Metro2Files
@@ -71,7 +71,7 @@ test-suite tests
       tests
   ghc-options: -Wall -fno-warn-orphans
   build-depends:
-      metro2
+      haskell-metro2-generated
     , QuickCheck
     , aeson
     , base >=4.7 && <5.0
