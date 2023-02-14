@@ -239,7 +239,7 @@ baseSegmentSecondLineAddressL f BaseSegment{..} = (\baseSegmentSecondLineAddress
 {-# INLINE baseSegmentSecondLineAddressL #-}
 
 -- | 'baseSegmentCity' Lens
-baseSegmentCityL :: Lens_' BaseSegment (Maybe Text)
+baseSegmentCityL :: Lens_' BaseSegment (Text)
 baseSegmentCityL f BaseSegment{..} = (\baseSegmentCity -> BaseSegment { baseSegmentCity, ..} ) <$> f baseSegmentCity
 {-# INLINE baseSegmentCityL #-}
 

@@ -130,7 +130,7 @@ data BaseSegment = BaseSegment
   , baseSegmentCountryCode :: !(Maybe Text) -- ^ "countryCode"
   , baseSegmentFirstLineAddress :: !(Text) -- ^ /Required/ "firstLineAddress"
   , baseSegmentSecondLineAddress :: !(Maybe Text) -- ^ "secondLineAddress"
-  , baseSegmentCity :: !(Maybe Text) -- ^ "city"
+  , baseSegmentCity :: !(Text) -- ^ /Required/ "city"
   , baseSegmentState :: !(Text) -- ^ /Required/ "state"
   , baseSegmentZipCode :: !(Text) -- ^ /Required/ "zipCode"
   , baseSegmentAddressIndicator :: !(Maybe E'AddressIndicator) -- ^ "addressIndicator"
@@ -181,7 +181,7 @@ instance A.FromJSON BaseSegment where
       <*> (o .:? "countryCode")
       <*> (o .:  "firstLineAddress")
       <*> (o .:? "secondLineAddress")
-      <*> (o .:? "city")
+      <*> (o .: "city")
       <*> (o .:  "state")
       <*> (o .:  "zipCode")
       <*> (o .:? "addressIndicator")
@@ -257,10 +257,11 @@ mkBaseSegment
   -> DateTime -- ^ 'baseSegmentDateBirth'
   -> Text -- ^ 'baseSegmentEcoaCode'
   -> Text -- ^ 'baseSegmentFirstLineAddress'
+  -> Text -- ^ 'baseSegmentCity'
   -> Text -- ^ 'baseSegmentState'
   -> Text -- ^ 'baseSegmentZipCode'
   -> BaseSegment
-mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber baseSegmentConsumerAccountNumber baseSegmentAccountType baseSegmentHighestCredit baseSegmentTermsDuration baseSegmentAccountStatus baseSegmentPaymentHistoryProfile baseSegmentCurrentBalance baseSegmentDateAccountInformation baseSegmentSurname baseSegmentFirstName baseSegmentSocialSecurityNumber baseSegmentDateBirth baseSegmentEcoaCode baseSegmentFirstLineAddress baseSegmentState baseSegmentZipCode =
+mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber baseSegmentConsumerAccountNumber baseSegmentAccountType baseSegmentHighestCredit baseSegmentTermsDuration baseSegmentAccountStatus baseSegmentPaymentHistoryProfile baseSegmentCurrentBalance baseSegmentDateAccountInformation baseSegmentSurname baseSegmentFirstName baseSegmentSocialSecurityNumber baseSegmentDateBirth baseSegmentEcoaCode baseSegmentFirstLineAddress baseSegmentCity baseSegmentState baseSegmentZipCode =
   BaseSegment
   { baseSegmentBlockDescriptorWord = Nothing
   , baseSegmentRecordDescriptorWord
@@ -302,7 +303,7 @@ mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber ba
   , baseSegmentCountryCode = Nothing
   , baseSegmentFirstLineAddress
   , baseSegmentSecondLineAddress = Nothing
-  , baseSegmentCity = Nothing
+  , baseSegmentCity
   , baseSegmentState
   , baseSegmentZipCode
   , baseSegmentAddressIndicator = Nothing
