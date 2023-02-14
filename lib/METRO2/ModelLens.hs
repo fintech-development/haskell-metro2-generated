@@ -124,7 +124,7 @@ baseSegmentPaymentRatingL f BaseSegment{..} = (\baseSegmentPaymentRating -> Base
 {-# INLINE baseSegmentPaymentRatingL #-}
 
 -- | 'baseSegmentPaymentHistoryProfile' Lens
-baseSegmentPaymentHistoryProfileL :: Lens_' BaseSegment (E'PaymentHistoryProfile)
+baseSegmentPaymentHistoryProfileL :: Lens_' BaseSegment Text
 baseSegmentPaymentHistoryProfileL f BaseSegment{..} = (\baseSegmentPaymentHistoryProfile -> BaseSegment { baseSegmentPaymentHistoryProfile, ..} ) <$> f baseSegmentPaymentHistoryProfile
 {-# INLINE baseSegmentPaymentHistoryProfileL #-}
 

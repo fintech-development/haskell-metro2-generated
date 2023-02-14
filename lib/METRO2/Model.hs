@@ -107,7 +107,7 @@ data BaseSegment = BaseSegment
   , baseSegmentActualPaymentAmount :: !(Maybe Int) -- ^ "actualPaymentAmount"
   , baseSegmentAccountStatus :: !(E'AccountStatus) -- ^ /Required/ "accountStatus"
   , baseSegmentPaymentRating :: !(Maybe E'PaymentRating) -- ^ "paymentRating"
-  , baseSegmentPaymentHistoryProfile :: !(E'PaymentHistoryProfile) -- ^ /Required/ "paymentHistoryProfile"
+  , baseSegmentPaymentHistoryProfile :: !(Text) -- ^ /Required/ "paymentHistoryProfile"
   , baseSegmentSpecialComment :: !(Maybe Text) -- ^ "specialComment"
   , baseSegmentComplianceConditionCode :: !(Maybe Text) -- ^ "complianceConditionCode"
   , baseSegmentCurrentBalance :: !(Int) -- ^ /Required/ "currentBalance"
@@ -248,7 +248,7 @@ mkBaseSegment
   -> Int -- ^ 'baseSegmentHighestCredit'
   -> Text -- ^ 'baseSegmentTermsDuration'
   -> E'AccountStatus -- ^ 'baseSegmentAccountStatus'
-  -> E'PaymentHistoryProfile -- ^ 'baseSegmentPaymentHistoryProfile'
+  -> Text -- ^ 'baseSegmentPaymentHistoryProfile'
   -> Int -- ^ 'baseSegmentCurrentBalance'
   -> DateTime -- ^ 'baseSegmentDateAccountInformation'
   -> Text -- ^ 'baseSegmentSurname'
