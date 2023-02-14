@@ -57,7 +57,7 @@ import Control.Applicative (Alternative)
 import Data.Function ((&))
 import Data.Monoid ((<>))
 import Data.Text (Text)
-import Prelude (($),(/=),(.),(<$>),(<*>),(>>=),(=<<),Maybe(..),Bool(..),Char,Double,FilePath,Float,Int,Integer,String,fmap,undefined,mempty,maybe,pure,Monad,Applicative,Functor)
+import Prelude (($),(/=),(.),(<$>),(<*>),(>>=),(=<<),Maybe(..),Bool(..),Char,Double,FilePath,Float,Int,Integer,String,fmap,undefined,mempty,maybe,pure,Monad,Applicative,Functor,filter)
 
 import qualified Prelude as P
 
@@ -190,7 +190,7 @@ instance A.FromJSON BaseSegment where
 -- | ToJSON BaseSegment
 instance A.ToJSON BaseSegment where
   toJSON BaseSegment {..} =
-   A.object
+   A.object $ omitNulls
       [ "blockDescriptorWord" .= baseSegmentBlockDescriptorWord
       , "recordDescriptorWord" .= baseSegmentRecordDescriptorWord
       , "timeStamp" .= baseSegmentTimeStamp
@@ -340,7 +340,7 @@ instance A.FromJSON DataRecord where
 -- | ToJSON DataRecord
 instance A.ToJSON DataRecord where
   toJSON DataRecord {..} =
-   A.object
+   A.object $ omitNulls
       [ "base" .= dataRecordBase
       , "j1" .= dataRecordJ1
       , "j2" .= dataRecordJ2
@@ -389,7 +389,7 @@ instance A.FromJSON File where
 -- | ToJSON File
 instance A.ToJSON File where
   toJSON File {..} =
-   A.object
+   A.object $ omitNulls
       [ "header" .= fileHeader
       , "data" .= fileData
       , "trailer" .= fileTrailer
@@ -457,7 +457,7 @@ instance A.FromJSON HeaderRecord where
 -- | ToJSON HeaderRecord
 instance A.ToJSON HeaderRecord where
   toJSON HeaderRecord {..} =
-   A.object
+   A.object $ omitNulls
       [ "blockDescriptorWord" .= headerRecordBlockDescriptorWord
       , "recordDescriptorWord" .= headerRecordRecordDescriptorWord
       , "recordIdentifier" .= headerRecordRecordIdentifier
@@ -543,7 +543,7 @@ instance A.FromJSON J1Segment where
 -- | ToJSON J1Segment
 instance A.ToJSON J1Segment where
   toJSON J1Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= j1SegmentSegmentIdentifier
       , "surname" .= j1SegmentSurname
       , "firstName" .= j1SegmentFirstName
@@ -629,7 +629,7 @@ instance A.FromJSON J2Segment where
 -- | ToJSON J2Segment
 instance A.ToJSON J2Segment where
   toJSON J2Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= j2SegmentSegmentIdentifier
       , "surname" .= j2SegmentSurname
       , "firstName" .= j2SegmentFirstName
@@ -705,7 +705,7 @@ instance A.FromJSON K1Segment where
 -- | ToJSON K1Segment
 instance A.ToJSON K1Segment where
   toJSON K1Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= k1SegmentSegmentIdentifier
       , "originalCreditorName" .= k1SegmentOriginalCreditorName
       , "creditorClassification" .= k1SegmentCreditorClassification
@@ -744,7 +744,7 @@ instance A.FromJSON K2Segment where
 -- | ToJSON K2Segment
 instance A.ToJSON K2Segment where
   toJSON K2Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= k2SegmentSegmentIdentifier
       , "purchasedIndicator" .= k2SegmentPurchasedIndicator
       , "purchasedName" .= k2SegmentPurchasedName
@@ -785,7 +785,7 @@ instance A.FromJSON K3Segment where
 -- | ToJSON K3Segment
 instance A.ToJSON K3Segment where
   toJSON K3Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= k3SegmentSegmentIdentifier
       , "agencyIdentifier" .= k3SegmentAgencyIdentifier
       , "accountNumber" .= k3SegmentAccountNumber
@@ -828,7 +828,7 @@ instance A.FromJSON K4Segment where
 -- | ToJSON K4Segment
 instance A.ToJSON K4Segment where
   toJSON K4Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= k4SegmentSegmentIdentifier
       , "specializedPaymentIndicator" .= k4SegmentSpecializedPaymentIndicator
       , "deferredPaymentStartDate" .= k4SegmentDeferredPaymentStartDate
@@ -872,7 +872,7 @@ instance A.FromJSON L1Segment where
 -- | ToJSON L1Segment
 instance A.ToJSON L1Segment where
   toJSON L1Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= l1SegmentSegmentIdentifier
       , "changeIndicator" .= l1SegmentChangeIndicator
       , "newConsumerAccountNumber" .= l1SegmentNewConsumerAccountNumber
@@ -922,7 +922,7 @@ instance A.FromJSON N1Segment where
 -- | ToJSON N1Segment
 instance A.ToJSON N1Segment where
   toJSON N1Segment {..} =
-   A.object
+   A.object $ omitNulls
       [ "segmentIdentifier" .= n1SegmentSegmentIdentifier
       , "employerName" .= n1SegmentEmployerName
       , "firstLineEmployerAddress" .= n1SegmentFirstLineEmployerAddress
@@ -1056,7 +1056,7 @@ instance A.FromJSON TrailerRecord where
 -- | ToJSON TrailerRecord
 instance A.ToJSON TrailerRecord where
   toJSON TrailerRecord {..} =
-   A.object
+   A.object $ omitNulls
       [ "blockDescriptorWord" .= trailerRecordBlockDescriptorWord
       , "recordDescriptorWord" .= trailerRecordRecordDescriptorWord
       , "recordIdentifier" .= trailerRecordRecordIdentifier
@@ -2178,5 +2178,8 @@ toE'Type = \case
   "packed" -> P.Right E'Type'Packed
   s -> P.Left $ "toE'Type: enum parse failure: " P.++ P.show s
 
-
-
+omitNulls :: [(A.Key, A.Value)] -> [(A.Key, A.Value)]
+omitNulls = filter notNull
+  where
+    notNull (_, A.Null) = False
+    notNull _ = True
