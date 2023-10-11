@@ -93,6 +93,9 @@ data BaseSegment = BaseSegment
   { baseSegmentBlockDescriptorWord :: !(Maybe Int) -- ^ "blockDescriptorWord"
   , baseSegmentRecordDescriptorWord :: !(Int) -- ^ /Required/ "recordDescriptorWord"
   , baseSegmentTimeStamp :: !(Maybe DateTime) -- ^ "timeStamp"
+    -- Used to uniquely identify a data furnisher. Report your internal code to identify each branch, office, and/or credit central where information is verified. For accounts reported by servicers, the Identification Number should refer to the current holder of the note.
+    -- This number must be unique, at least 5 digits long, and should not include embedded blanks or special characters. Entire field should never be zero, blank or 9 filled.
+    -- This field must be consistent on a month-to-month basis to avoid duplication of information. Notify consumer reporting agencies before adding, deleting, or changing the identifiers in this field.
   , baseSegmentIdentificationNumber :: !(Text) -- ^ /Required/ "identificationNumber"
   , baseSegmentCycleIdentifier :: !(Maybe Text) -- ^ "cycleIdentifier"
   , baseSegmentConsumerAccountNumber :: !(Text) -- ^ /Required/ "consumerAccountNumber"
@@ -108,7 +111,7 @@ data BaseSegment = BaseSegment
   , baseSegmentAccountStatus :: !(E'AccountStatus) -- ^ /Required/ "accountStatus"
   , baseSegmentPaymentRating :: !(Maybe E'PaymentRating) -- ^ "paymentRating"
   , baseSegmentPaymentHistoryProfile :: !(Text) -- ^ /Required/ "paymentHistoryProfile"
-  , baseSegmentSpecialComment :: !(Maybe Text) -- ^ "specialComment"
+  , baseSegmentSpecialComment :: !(Maybe E'SpecialComment) -- ^ "specialComment"
   , baseSegmentComplianceConditionCode :: !(Maybe Text) -- ^ "complianceConditionCode"
   , baseSegmentCurrentBalance :: !(Int) -- ^ /Required/ "currentBalance"
   , baseSegmentAmountPastDue :: !(Maybe Int) -- ^ "amountPastDue"
@@ -2149,6 +2152,180 @@ toE'TermsFrequency = \case
   "S" -> P.Right E'TermsFrequency'S
   "Y" -> P.Right E'TermsFrequency'Y
   s -> P.Left $ "toE'TermsFrequency: enum parse failure: " P.++ P.show s
+
+
+-- The Special Comment Code (Field 19) must be reported each month as long as the condition applies.
+-- If more than one Special Comment applies to an account, it is the data furnisher’s decision to report the comment that is deemed most important from a business perspective for the current reporting period.
+data E'SpecialComment
+  = E'SpecialComment'B -- ^ @"B"@ Account payments managed by financial counseling program. Note: Used for external financial counseling programs.
+  | E'SpecialComment'C -- ^ @"C"@ Paid by Co-maker or Guarantor. Requires Account Status Code 13 or 61-65 and Current Balance = 0.
+  | E'SpecialComment'H -- ^ @"H"@ Loan assumed by another party. Requires ECOA Code T (Terminated). Refer to Frequently Asked Question 55 for reporting guidelines.
+  | E'SpecialComment'I -- ^ @"I"@ Election of remedy. Definition: A car or other item is repossessed, but the value is less than the balance due. The credit grantor must consider the account paid and cannot collect the difference in the amounts.
+  | E'SpecialComment'M -- ^ @"M"@ Account closed at credit grantor's request. Requires Date Closed to identify the date the account was closed to further purchases/use.
+  | E'SpecialComment'O -- ^ @"O"@ Account transferred to another company/servicer.
+  | E'SpecialComment'S -- ^ @"S"@ S Special handling. Contact credit grantor for additional information.
+  | E'SpecialComment'V -- ^ @"V"@ Adjustment pending. Definition: Account adjustment, such as returned merchandise and refund due.
+  | E'SpecialComment'AB -- ^ @"AB"@ Debt being paid through insurance. Account Status Code should not be 13 or 61-65.
+  | E'SpecialComment'AC -- ^ @"AC"@ Paying under a partial payment agreement. Account Status Code should not be 13 or 61-65. Definition: An agreed-upon repayment plan with account payments that are less than the original contract’s account payments.
+  | E'SpecialComment'AH -- ^ @"AH"@ Purchased by another company. Refer to Frequently Asked Question 47 for reporting guidelines.
+  | E'SpecialComment'AI -- ^ @"AI"@ Recalled to active military duty. Definition: To be used for reservists; not to be used to identify full time military personnel. Note: A code is not available to report full time military personnel.
+  | E'SpecialComment'AM -- ^ @"AM"@ Account payments assured by wage garnishment.
+  | E'SpecialComment'AN -- ^ @"AN"@  Account acquired by FDIC/NCUA. Definition: Federal Deposit Insurance Corp./National Credit Union Administration.
+  | E'SpecialComment'AO -- ^ @"AO"@ Voluntarily surrendered - then redeemed or reinstated.
+  | E'SpecialComment'AP -- ^ @"AP"@ Credit Line suspended. Continue to report the last assigned Credit Limit. Account Status Code should not be 13 or 61-65. Does not require Date Closed to be reported since credit line is temporarily suspended. Definition: The credit line is temporarily unavailable for use.
+  | E'SpecialComment'AS -- ^ @"AS"@ Account closed due to refinance. Refer to Frequently Asked Question 42 for reporting guidelines.
+  | E'SpecialComment'AT -- ^ @"AT"@ Account closed due to transfer. Note: Used for internal transfers. Refer to Frequently Asked Question 46 for reporting guidelines.
+  | E'SpecialComment'AU -- ^ @"AU"@ Account paid in full for less than the full balance.  Requires Account Status Code 13 or 61-65 and Current Balance = 0. Refer to Frequently Asked Questions 38 and 53 for reporting guidelines. Definition: To be used when the furnisher accepts payment in full for less than the full balance. Includes short sales.
+  | E'SpecialComment'AV -- ^ @"AV"@ First payment never received. Comment: May indicate fraudulent activity.
+  | E'SpecialComment'AW -- ^ @"AW"@ Affected by natural or declared disaster. Refer to Frequently Asked Question 58 for reporting guidelines.
+  | E'SpecialComment'AX -- ^ @"AX"@ Account paid from collateral. Requires Account Status Code 13 or 61-65 and Current Balance = 0
+  | E'SpecialComment'AZ -- ^ @"AZ"@ Redeemed or reinstated repossession.
+  | E'SpecialComment'BA -- ^ @"BA"@ Transferred to Recovery. Requires Account Status Code 71 - 97. Note: Used for internal transfers
+  | E'SpecialComment'BB -- ^ @"BB"@ Full termination/status pending.
+  | E'SpecialComment'BC -- ^ @"BC"@ Full termination/obligation satisfied.
+  | E'SpecialComment'BD -- ^ @"BD"@ Full termination/balance owing.
+  | E'SpecialComment'BE -- ^ @"BE"@ Early termination/status pending.
+  | E'SpecialComment'BF -- ^ @"BF"@ Early termination/obligation satisfied.
+  | E'SpecialComment'BG -- ^ @"BG"@ Early termination/balance owing.
+  | E'SpecialComment'BH -- ^ @"BH"@ Early termination/insurance loss.
+  | E'SpecialComment'BI -- ^ @"BI"@ Involuntary repossession.
+  | E'SpecialComment'BJ -- ^ @"BJ"@ Involuntary repossession/obligation satisfied
+  | E'SpecialComment'BK -- ^ @"BK"@ Involuntary repossession/balance owing.
+  | E'SpecialComment'BL -- ^ @"BL"@ Credit card lost or stolen.
+  | E'SpecialComment'BN -- ^ @"BN"@ Paid by company which originally sold the merchandise.
+  | E'SpecialComment'BO -- ^ @"BO"@ Foreclosure proceedings started.
+  | E'SpecialComment'BP -- ^ @"BP"@ Paid through insurance.
+  | E'SpecialComment'BS -- ^ @"BS"@ Prepaid lease
+  | E'SpecialComment'BT -- ^ @"BT"@ Principal deferred/Interest payment only.
+  | E'SpecialComment'CH -- ^ @"CH"@ Guaranteed/Insured.
+  | E'SpecialComment'CI -- ^ @"CI"@ Account closed due to inactivity.
+  | E'SpecialComment'CJ -- ^ @"CJ"@ Credit line no longer available – in repayment phase.
+  | E'SpecialComment'CK -- ^ @"CK"@ Credit line reduced due to collateral depreciation.
+  | E'SpecialComment'CL -- ^ @"CL"@ Credit line suspended due to collateral depreciation.
+  | E'SpecialComment'CM -- ^ @"CM"@ Collateral released by creditor / Balance owing.
+  | E'SpecialComment'CN -- ^ @"CN"@ Loan modified under a federal government plan.
+  | E'SpecialComment'CO -- ^ @"CO"@ Loan modified.
+  | E'SpecialComment'CP -- ^ @"CP"@ Account in forbearance.
+  | E'SpecialComment'CS -- ^ @"CS"@ Used by Child Support Agencies only when reporting delinquent or collection accounts. (No actual comment displays.)
+  | E'SpecialComment'DE -- ^ @"DE"@ Debt extinguished under state law.
+  deriving (P.Show, P.Eq, P.Typeable, P.Ord, P.Bounded, P.Enum)
+
+instance A.ToJSON E'SpecialComment where toJSON = A.toJSON . fromE'SpecialComment
+instance A.FromJSON E'SpecialComment where parseJSON o = P.either P.fail (pure . P.id) . toE'SpecialComment =<< A.parseJSON o
+instance WH.ToHttpApiData E'SpecialComment where toQueryParam = WH.toQueryParam . fromE'SpecialComment
+instance WH.FromHttpApiData E'SpecialComment where parseQueryParam o = WH.parseQueryParam o >>= P.left T.pack . toE'SpecialComment
+instance MimeRender MimeMultipartFormData E'SpecialComment where mimeRender _ = mimeRenderDefaultMultipartFormData
+
+-- | unwrap 'E'SpecialComment' enum
+fromE'SpecialComment :: E'SpecialComment -> Text
+fromE'SpecialComment = \case
+    E'SpecialComment'B -> "B"
+    E'SpecialComment'C -> "C"
+    E'SpecialComment'H -> "H"
+    E'SpecialComment'I -> "I"
+    E'SpecialComment'M -> "M"
+    E'SpecialComment'O -> "O"
+    E'SpecialComment'S -> "S"
+    E'SpecialComment'V -> "V"
+    E'SpecialComment'AB -> "AB"
+    E'SpecialComment'AC -> "AC"
+    E'SpecialComment'AH -> "AH"
+    E'SpecialComment'AI -> "AI"
+    E'SpecialComment'AM -> "AM"
+    E'SpecialComment'AN -> "AN"
+    E'SpecialComment'AO -> "AO"
+    E'SpecialComment'AP -> "AP"
+    E'SpecialComment'AS -> "AS"
+    E'SpecialComment'AT -> "AT"
+    E'SpecialComment'AU -> "AU"
+    E'SpecialComment'AV -> "AV"
+    E'SpecialComment'AW -> "AW"
+    E'SpecialComment'AX -> "AX"
+    E'SpecialComment'AZ -> "AZ"
+    E'SpecialComment'BA -> "BA"
+    E'SpecialComment'BB -> "BB"
+    E'SpecialComment'BC -> "BC"
+    E'SpecialComment'BD -> "BD"
+    E'SpecialComment'BE -> "BE"
+    E'SpecialComment'BF -> "BF"
+    E'SpecialComment'BG -> "BG"
+    E'SpecialComment'BH -> "BH"
+    E'SpecialComment'BI -> "BI"
+    E'SpecialComment'BJ -> "BJ"
+    E'SpecialComment'BK -> "BK"
+    E'SpecialComment'BL -> "BL"
+    E'SpecialComment'BN -> "BN"
+    E'SpecialComment'BO -> "BO"
+    E'SpecialComment'BP -> "BP"
+    E'SpecialComment'BS -> "BS"
+    E'SpecialComment'BT -> "BT"
+    E'SpecialComment'CH -> "CH"
+    E'SpecialComment'CI -> "CI"
+    E'SpecialComment'CJ -> "CJ"
+    E'SpecialComment'CK -> "CK"
+    E'SpecialComment'CL -> "CL"
+    E'SpecialComment'CM -> "CM"
+    E'SpecialComment'CN -> "CN"
+    E'SpecialComment'CO -> "CO"
+    E'SpecialComment'CP -> "CP"
+    E'SpecialComment'CS -> "CS"
+    E'SpecialComment'DE -> "DE"
+
+-- | parse 'E'SpecialComment' enum
+toE'SpecialComment :: Text -> P.Either String E'SpecialComment
+toE'SpecialComment = \case
+  "B" -> P.Right E'SpecialComment'B
+  "C" -> P.Right E'SpecialComment'C
+  "H" -> P.Right E'SpecialComment'H
+  "I" -> P.Right E'SpecialComment'I
+  "M" -> P.Right E'SpecialComment'M
+  "O" -> P.Right E'SpecialComment'O
+  "S" -> P.Right E'SpecialComment'S
+  "V" -> P.Right E'SpecialComment'V
+  "AB" -> P.Right E'SpecialComment'AB
+  "AC" -> P.Right E'SpecialComment'AC
+  "AH" -> P.Right E'SpecialComment'AH
+  "AI" -> P.Right E'SpecialComment'AI
+  "AM" -> P.Right E'SpecialComment'AM
+  "AN" -> P.Right E'SpecialComment'AN
+  "AO" -> P.Right E'SpecialComment'AO
+  "AP" -> P.Right E'SpecialComment'AP
+  "AS" -> P.Right E'SpecialComment'AS
+  "AT" -> P.Right E'SpecialComment'AT
+  "AU" -> P.Right E'SpecialComment'AU
+  "AV" -> P.Right E'SpecialComment'AV
+  "AW" -> P.Right E'SpecialComment'AW
+  "AX" -> P.Right E'SpecialComment'AX
+  "AZ" -> P.Right E'SpecialComment'AZ
+  "BA" -> P.Right E'SpecialComment'BA
+  "BB" -> P.Right E'SpecialComment'BB
+  "BC" -> P.Right E'SpecialComment'BC
+  "BD" -> P.Right E'SpecialComment'BD
+  "BE" -> P.Right E'SpecialComment'BE
+  "BF" -> P.Right E'SpecialComment'BF
+  "BG" -> P.Right E'SpecialComment'BG
+  "BH" -> P.Right E'SpecialComment'BH
+  "BI" -> P.Right E'SpecialComment'BI
+  "BJ" -> P.Right E'SpecialComment'BJ
+  "BK" -> P.Right E'SpecialComment'BK
+  "BL" -> P.Right E'SpecialComment'BL
+  "BN" -> P.Right E'SpecialComment'BN
+  "BO" -> P.Right E'SpecialComment'BO
+  "BP" -> P.Right E'SpecialComment'BP
+  "BS" -> P.Right E'SpecialComment'BS
+  "BT" -> P.Right E'SpecialComment'BT
+  "CH" -> P.Right E'SpecialComment'CH
+  "CI" -> P.Right E'SpecialComment'CI
+  "CJ" -> P.Right E'SpecialComment'CJ
+  "CK" -> P.Right E'SpecialComment'CK
+  "CL" -> P.Right E'SpecialComment'CL
+  "CM" -> P.Right E'SpecialComment'CM
+  "CN" -> P.Right E'SpecialComment'CN
+  "CO" -> P.Right E'SpecialComment'CO
+  "CP" -> P.Right E'SpecialComment'CP
+  "CS" -> P.Right E'SpecialComment'CS
+  "DE" -> P.Right E'SpecialComment'DE
+  s -> P.Left $ "toE'SpecialComment: enum parse failure: " P.++ P.show s
 
 
 -- ** E'Type
