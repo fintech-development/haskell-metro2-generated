@@ -129,7 +129,7 @@ baseSegmentPaymentHistoryProfileL f BaseSegment{..} = (\baseSegmentPaymentHistor
 {-# INLINE baseSegmentPaymentHistoryProfileL #-}
 
 -- | 'baseSegmentSpecialComment' Lens
-baseSegmentSpecialCommentL :: Lens_' BaseSegment (Maybe Text)
+baseSegmentSpecialCommentL :: Lens_' BaseSegment (Maybe E'SpecialComment)
 baseSegmentSpecialCommentL f BaseSegment{..} = (\baseSegmentSpecialComment -> BaseSegment { baseSegmentSpecialComment, ..} ) <$> f baseSegmentSpecialComment
 {-# INLINE baseSegmentSpecialCommentL #-}
 
