@@ -134,6 +134,7 @@ genBaseSegment n =
     <*> arbitrary -- baseSegmentZipCode :: Text
     <*> arbitraryReducedMaybe n -- baseSegmentAddressIndicator :: Maybe E'AddressIndicator
     <*> arbitraryReducedMaybe n -- baseSegmentResidenceCode :: Maybe E'ResidenceCode
+    <*> arbitrary -- baseSegmentProcessingIndicator :: Int
   
 instance Arbitrary DataRecord where
   arbitrary = sized genDataRecord

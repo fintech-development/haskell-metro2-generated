@@ -138,6 +138,7 @@ data BaseSegment = BaseSegment
   , baseSegmentZipCode :: !(Text) -- ^ /Required/ "zipCode"
   , baseSegmentAddressIndicator :: !(Maybe E'AddressIndicator) -- ^ "addressIndicator"
   , baseSegmentResidenceCode :: !(Maybe E'ResidenceCode) -- ^ "residenceCode"
+  , baseSegmentProcessingIndicator :: !(Int) -- ^ /Required/ "processingIndicator"
   } deriving (P.Show, P.Eq, P.Typeable)
 
 -- | FromJSON BaseSegment
@@ -189,6 +190,7 @@ instance A.FromJSON BaseSegment where
       <*> (o .:  "zipCode")
       <*> (o .:? "addressIndicator")
       <*> (o .:? "residenceCode")
+      <*> (o .: "processingIndicator")
 
 -- | ToJSON BaseSegment
 instance A.ToJSON BaseSegment where
@@ -239,6 +241,7 @@ instance A.ToJSON BaseSegment where
       , "zipCode" .= baseSegmentZipCode
       , "addressIndicator" .= baseSegmentAddressIndicator
       , "residenceCode" .= baseSegmentResidenceCode
+      , "processingIndicator" .= baseSegmentProcessingIndicator
       ]
 
 
@@ -263,8 +266,9 @@ mkBaseSegment
   -> Text -- ^ 'baseSegmentCity'
   -> Text -- ^ 'baseSegmentState'
   -> Text -- ^ 'baseSegmentZipCode'
+  -> Int -- ^ 'processingIndicator'
   -> BaseSegment
-mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber baseSegmentConsumerAccountNumber baseSegmentAccountType baseSegmentHighestCredit baseSegmentTermsDuration baseSegmentAccountStatus baseSegmentPaymentHistoryProfile baseSegmentCurrentBalance baseSegmentDateAccountInformation baseSegmentSurname baseSegmentFirstName baseSegmentSocialSecurityNumber baseSegmentDateBirth baseSegmentEcoaCode baseSegmentFirstLineAddress baseSegmentCity baseSegmentState baseSegmentZipCode =
+mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber baseSegmentConsumerAccountNumber baseSegmentAccountType baseSegmentHighestCredit baseSegmentTermsDuration baseSegmentAccountStatus baseSegmentPaymentHistoryProfile baseSegmentCurrentBalance baseSegmentDateAccountInformation baseSegmentSurname baseSegmentFirstName baseSegmentSocialSecurityNumber baseSegmentDateBirth baseSegmentEcoaCode baseSegmentFirstLineAddress baseSegmentCity baseSegmentState baseSegmentZipCode baseSegmentProcessingIndicator =
   BaseSegment
   { baseSegmentBlockDescriptorWord = Nothing
   , baseSegmentRecordDescriptorWord
@@ -311,6 +315,7 @@ mkBaseSegment baseSegmentRecordDescriptorWord baseSegmentIdentificationNumber ba
   , baseSegmentZipCode
   , baseSegmentAddressIndicator = Nothing
   , baseSegmentResidenceCode = Nothing
+  , baseSegmentProcessingIndicator
   }
 
 -- ** DataRecord
